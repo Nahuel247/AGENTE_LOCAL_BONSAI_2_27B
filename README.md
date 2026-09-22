@@ -1,8 +1,10 @@
 # Agente local Bonsai 2 27B
 
-Scripts Python para preparar y ejecutar **Ternary-Bonsai-2-27B PTQ1_0** en Windows con NVIDIA CUDA, tanto en la consola Python de PyCharm como en una interfaz web local con Markdown, tablas y respuestas progresivas.
+Preparé este proyecto para que puedas ejecutar **Bonsai 2 en tu propio computador**, conversar con él desde Python o usar una aplicación web local que muestra tablas, negritas y respuestas a medida que se generan.
 
-Python controla el proceso; la inferencia la realiza el runtime de PrismML basado en llama.cpp. El asistente conversa, pero **no ejecuta herramientas, no navega por internet y no accede automáticamente a tus archivos**.
+Aquí comparto los cinco scripts que utilizo para preparar el entorno, descargar **Ternary-Bonsai-2-27B PTQ1_0** y ponerlo en marcha en Windows con una GPU NVIDIA. Más abajo te explico cómo repetir la instalación y hacer tu primera consulta.
+
+Uso Python para iniciar y controlar el modelo; quien genera las respuestas es el runtime de PrismML basado en llama.cpp. Aunque llamé al proyecto «agente local», esta versión es un asistente de conversación: **no ejecuta herramientas, no navega por internet y no accede automáticamente a tus archivos**.
 
 ## Así se ve la aplicación
 
@@ -14,13 +16,13 @@ Ejemplo de respuesta a una consulta de redacción técnica:
 
 ![Respuesta de Bonsai 2 con razonamiento activado y métricas de generación](docs/imagenes/app-respuesta.png)
 
-Estas capturas fueron seleccionadas para mostrar la aplicación. Incluyen los títulos de conversaciones visibles, pero no se distribuye la base de datos del historial del navegador.
+Incluí estas capturas de mis pruebas para mostrarte la interfaz. El repositorio no incluye mi historial de conversaciones; al instalarlo tendrás tu propio historial.
 
 ### Velocidad observada
 
-Como referencia de uso, el autor reporta **alrededor de 30 tokens por segundo de generación** en su **NVIDIA RTX 4070 Laptop de 8 GB**, con Bonsai 2 27B PTQ1_0 y el runtime CUDA de PrismML, sin DSpark.
+En mi **NVIDIA RTX 4070 Laptop de 8 GB** he observado **alrededor de 30 tokens por segundo de generación**, usando Bonsai 2 27B PTQ1_0 con el runtime CUDA de PrismML, sin DSpark.
 
-La configuración distribuida del chat web usa contexto de 8192 tokens, salida máxima de 4096, thinking activado con esfuerzo `medium`, 8 threads y offloading a GPU. La velocidad depende del contexto, la consulta, los ajustes efectivos del navegador y la carga del equipo; 30 tokens/s es una referencia aproximada, no un promedio de benchmark publicado ni una garantía para cada respuesta.
+Dejé el chat web configurado con contexto de 8192 tokens, salida máxima de 4096, razonamiento activado con esfuerzo `medium`, 8 hilos de CPU y carga de capas en la GPU. La velocidad cambia según la consulta, el contexto, los ajustes del navegador y lo que esté haciendo el equipo. Los 30 tokens/s son una referencia de mi experiencia, no una velocidad garantizada ni un promedio de un benchmark publicado.
 
 La captura de respuesta muestra **24,74 tokens/s** para esa consulta concreta. Los **225,50 tokens/s** que aparecen junto al mensaje del usuario corresponden al procesamiento de la entrada, no a la generación de la respuesta. Con thinking, el modelo puede generar tokens de razonamiento antes de mostrar texto al usuario.
 
@@ -46,11 +48,24 @@ No se incluyen pesos, ejecutables CUDA, entornos Python, archivos de conversacio
 - Espacio para el modelo de 5,95 GB, los ZIP del runtime y CUDA, y sus archivos extraídos. Conviene disponer de al menos 12 GB libres; el descargador comprueba espacio antes de continuar.
 - Conexión a internet para la descarga inicial y un navegador moderno para el chat web.
 
-El proyecto se desarrolló con una RTX 4070 Laptop de 8 GB. Esto no garantiza compatibilidad ni rendimiento en otras GPU. No se instalan ni modifican drivers. No se utiliza DSpark.
+Lo he utilizado en mi RTX 4070 Laptop de 8 GB; no he comprobado el rendimiento en todas las GPU. Los scripts no instalan ni modifican drivers y no utilizan DSpark. Los 5,95 GB corresponden al archivo del modelo: al ejecutarlo también hace falta memoria para el contexto y otros recursos.
+
+## Antes de empezar
+
+Para la instalación, los bloques marcados como `bat` se ejecutan en **Símbolo del sistema de Windows (cmd)**, no en la consola Python. Puedes abrir `cmd` desde el menú Inicio. PyCharm es opcional para la web; más abajo explico también cómo usar su consola Python.
+
+Comprueba que tienes Python 3.12 y que Windows reconoce la GPU NVIDIA:
+
+```bat
+py -3.12 --version
+nvidia-smi
+```
+
+El primer comando debe mostrar `Python 3.12.x`; el segundo, la GPU y su driver. Si alguno falla, resuelve la instalación de Python o del driver NVIDIA antes de continuar.
 
 ## 1. Descargar el proyecto y configurar las rutas
 
-Descarga el ZIP del repositorio desde **Code → Download ZIP** y extráelo, o clónalo en una carpeta nueva. Abre esa carpeta en PyCharm.
+Descarga el ZIP del repositorio desde **Code → Download ZIP** y extráelo, o clónalo en una carpeta nueva. Usa como raíz del proyecto la carpeta donde aparecen los archivos `001` a `005`, no la carpeta que los contiene por fuera.
 
 Copia `rutas_ejemplo.json` como **`rutas_locales.json`**, al lado de los scripts, y completa las cuatro rutas. Ejemplo ficticio: sustituye `TU_USUARIO` y las carpetas por tus valores reales. En JSON puedes usar `/` para evitar escapar las barras.
 
@@ -68,21 +83,33 @@ Copia `rutas_ejemplo.json` como **`rutas_locales.json`**, al lado de los scripts
 - `PATH_MODELOS`: directorio externo de pesos. **Créalo antes del paso 002.**
 - `PATH_PYTHON`: intérprete del entorno elegido; debe estar dentro de `PATH_AMBIENTES`.
 
+Si es tu primera instalación, `PATH_PYTHON` puede apuntar al futuro entorno `bonsai_27b`, como en el ejemplo: el paso siguiente lo crea si no encuentra otro compatible. Después comprobarás que esta ruta coincide con la que muestra el script.
+
 El archivo local está excluido de Git. No pongas pesos ni entornos dentro del proyecto. Las rutas deben ser absolutas; no se expanden variables como `%USERPROFILE%` dentro del JSON.
 
 ## 2. Preparar el entorno
 
-Desde la terminal, situada en la carpeta del proyecto:
+En cmd, entra en la carpeta del proyecto y ejecuta el primer script. Sustituye la ruta de este ejemplo por tu `PATH_PROYECTO`:
 
 ```bat
+cd /d "C:\Proyectos\AGENTE_LOCAL_BONSAI_2_27B"
 py -3.12 "001 - Preparar entorno.py"
 ```
 
 El script busca Python 3.12 en los entornos existentes. Si no encuentra uno compatible, crea `bonsai_27b` dentro de `PATH_AMBIENTES`. No reemplaza un entorno incompatible existente.
 
-Al terminar muestra el intérprete que debes seleccionar en **PyCharm → Python Interpreter**. Actualiza `PATH_PYTHON` en el JSON si el intérprete seleccionado difiere del que habías indicado. Reinicia la consola Python después de cambiar las rutas.
+Al terminar muestra la ruta del intérprete elegido. **Copia esa ruta en `PATH_PYTHON` de `rutas_locales.json`**, si es distinta de la que habías indicado.
 
-En los comandos siguientes, `python` debe ser ese intérprete: usa la terminal con el entorno activado o su ruta completa entre comillas.
+Activa ese entorno en la misma ventana de cmd. Por ejemplo, si se creó `bonsai_27b` en la ubicación del JSON anterior:
+
+```bat
+call "C:\Users\TU_USUARIO\AMBIENTES_PYTHON\bonsai_27b\Scripts\activate.bat"
+python -c "import sys; print(sys.executable)"
+```
+
+Adapta la ruta si el script eligió otro entorno. La última línea debe mostrar el mismo intérprete que pusiste en `PATH_PYTHON`. Mantén esta terminal abierta para los siguientes pasos.
+
+**Si usas PyCharm:** abre la carpeta del proyecto y selecciona ese mismo `python.exe` como intérprete existente en **Settings → Project → Python Interpreter**. Reinicia la consola Python si estaba abierta. Seleccionar un intérprete en PyCharm no activa automáticamente una ventana de cmd que ya tenías abierta.
 
 ## 3. Descargar modelo y runtime
 
@@ -108,7 +135,7 @@ Esta distribución usa **Bonsai 2 ternario PTQ1_0**, no Bonsai 1 Q1_0. No sustit
 
 ## 4. Primera consulta
 
-Edita `pregunta` y los parámetros visibles del `003`, y ejecútalo:
+Para comprobar que todo funciona, ejecuta el `003` con la pregunta que dejé de ejemplo. Después puedes editar la variable `pregunta` para consultar lo que quieras:
 
 ```bat
 python "003 - Primer llamado.py"
@@ -118,13 +145,13 @@ El modelo se carga para esa consulta y se cierra al terminar. Se muestran la res
 
 ## 5. Abrir el chat web
 
-Cierra cualquier otra instancia del modelo y ejecuta:
+Con los pasos anteriores completados, puedes elegir entre el chat web (`005`) o la consola Python (`004`); **no necesitas ejecutar el 004 para abrir la web**. Para usar la web, cierra cualquier otra instancia del modelo y ejecuta en la terminal:
 
 ```bat
 python "005 - Chat web.py"
 ```
 
-Al terminar la carga se abre **http://127.0.0.1:8088/** en el navegador predeterminado. Si no se abre automáticamente, visita esa dirección.
+Al terminar la carga se abre [el chat local](http://127.0.0.1:8088/) en el navegador predeterminado. Si no se abre automáticamente, visita esa dirección. Escribe un mensaje y envíalo para comprobar que recibes la respuesta progresivamente. Mantén abierto el proceso de Python mientras usas la web.
 
 También puedes llamarlo desde la consola Python de PyCharm, con la raíz del proyecto como directorio de trabajo:
 
@@ -135,7 +162,15 @@ from rutas import PATH_PROYECTO
 runpy.run_path(str(PATH_PROYECTO / "005 - Chat web.py"))
 ```
 
-La llamada permanece activa mientras funciona la web. Puedes cambiar `contexto`, `max_tokens`, `thinking`, `esfuerzo` y `puerto` en el `005`. Los valores iniciales son contexto 8192, salida máxima 4096, thinking activado y esfuerzo `medium`.
+La llamada permanece activa mientras funciona la web. Para cambiar los valores iniciales, cierra la aplicación, edita el `005` y vuelve a ejecutarlo:
+
+| Parámetro | Valor inicial | Para qué sirve |
+|---|---|---|
+| `contexto` | `8192` | Espacio total para la entrada, el historial y la generación. |
+| `max_tokens` | `4096` | Límite de salida, incluido el razonamiento. |
+| `thinking` | `True` | Activa el razonamiento; usa `False` para desactivarlo. |
+| `esfuerzo` | `'medium'` | Esfuerzo solicitado al runtime; el lanzador también admite `'xhigh'`. |
+| `puerto` | `8088` | Puerto de la web local. |
 
 En el menú lateral puedes activar o desactivar thinking. Los ajustes guardados en el navegador pueden prevalecer sobre los valores iniciales del script. El límite de salida incluye el razonamiento y la respuesta visible; además, entrada + historial + generación deben caber en el contexto total.
 
@@ -149,30 +184,48 @@ Evita forzar la terminación de Python: puede dejar un proceso del runtime abier
 
 ## Alternativa: conversar y calcular en la consola Python
 
-El `004` está pensado para una **consola Python persistente**, no para un proceso que termina inmediatamente. Con la raíz del proyecto como directorio de trabajo:
+Preparé el `004` para poder conversar con el modelo y seguir haciendo cálculos en la misma consola. **No lo ejecutes a la vez que la web.**
+
+Abre **Python Console** en PyCharm, con el intérprete configurado en el paso 2 y la raíz del proyecto como directorio de trabajo. Ejecuta este bloque una sola vez y espera el mensaje «Listo»:
 
 ```python
 from rutas import PATH_PROYECTO
 
 exec((PATH_PROYECTO / "004 - Chat persistente.py").read_text(encoding="utf-8"))
+```
 
+Después, cada vez que quieras escribir una pregunta, ejecuta:
+
+```python
 agente()  # Aparece «Tú:»; escribe la pregunta sin comillas y pulsa Enter.
+```
+
+También puedes pasarle texto directamente y combinarlo con tus cálculos:
+
+```python
 total = 500 * 1.19
 agente(f"Explica este resultado: {total}")
-respuesta = agente("Resume nuestra conversación", mostrar=False)
-limpiar_historial()
-cerrar_modelo()
 ```
+
+Estas son otras opciones que puedes usar cuando las necesites:
+
+```python
+respuesta = agente("Resume nuestra conversación", mostrar=False)
+```
+
+- `limpiar_historial()` empieza una conversación nueva.
+- `cerrar_modelo()` cierra el modelo y libera su memoria cuando termines.
+
+El `004` necesita una consola que siga abierta: si lo ejecutas como un script que termina inmediatamente, el modelo también se cierra. Por eso uso `exec(...)` dentro de la consola Python en este ejemplo.
 
 La respuesta aparece progresivamente. Tus variables no se comparten automáticamente: inclúyelas en el texto si quieres que el modelo las conozca. Cierra el modelo del `004` antes de abrir la web. El `004` usa el puerto 8090.
 
 ## Privacidad y almacenamiento
 
-- El repositorio es una copia seleccionada del código, no una sincronización del directorio privado de desarrollo.
 - Los chats web se guardan en el almacenamiento del navegador. Cambiar de navegador, perfil o puerto puede mostrar un historial distinto.
 - `app/datos/registros/` contiene registros técnicos de ejecución; está excluido de Git.
 - `app/web_ui/chat-session.js` se genera al iniciar y no se versiona.
-- No se incluyen archivos de conversaciones, registros de uso, rutas personales, archivos `.env`, pesos, runtime ni entornos. Las dos capturas de demostración sí muestran el contenido y los títulos visibles seleccionados por el autor.
+- Dejé fuera del repositorio mis conversaciones, registros de uso, rutas personales, archivos `.env`, pesos, runtime y entornos. Las capturas de arriba sí muestran ejemplos de mis pruebas.
 - Guarda las exportaciones de conversaciones fuera del repositorio o en `privado/`. Revisa los archivos antes de cualquier commit; no uses `git add -f` para datos privados.
 
 Un `.gitignore` no borra contenido ya versionado ni protege un archivo privado colocado manualmente dentro de una ruta permitida. Este repositorio limita por defecto los archivos de la raíz que pueden incorporarse.
@@ -191,6 +244,6 @@ Un `.gitignore` no borra contenido ya versionado ni protege un archivo privado c
 
 ## Alcance y componentes de terceros
 
-Esta entrega distribuye la aplicación y los scripts de uso. No incluye los experimentos privados ni promete una velocidad concreta. La validación de la copia de publicación comprueba código, recursos y arranque simulado; no sustituye una prueba de descarga e inferencia en cada PC.
+Comparto los scripts y la aplicación que utilizo para que puedas probarlos en tu equipo. No desarrollé el modelo ni el motor de inferencia: uso el modelo de PrismML y su runtime basado en llama.cpp. La interfaz web también incorpora componentes de terceros.
 
-Consulta [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) y `LICENSES/` para la procedencia y los avisos conservados de la interfaz. Los pesos y binarios se descargan por separado de sus distribuidores oficiales.
+Puedes consultar [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) y la carpeta [LICENSES](LICENSES/) para conocer su procedencia y los avisos de licencia. Los pesos y binarios se descargan por separado de sus distribuidores oficiales.
