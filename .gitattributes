@@ -1,0 +1,3 @@
+* text=auto
+# Conservar el formato interno de los recursos compilados de terceros.
+app/web_ui/_app/immutable/** -whitespace

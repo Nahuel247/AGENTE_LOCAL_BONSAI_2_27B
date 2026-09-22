@@ -1,0 +1,40 @@
+# Lista permitida: los demás archivos de la raíz quedan fuera.
+/*
+!/.gitignore
+!/.gitattributes
+!/README.md
+!/THIRD_PARTY_NOTICES.md
+!/LICENSES/
+!/001 - Preparar entorno.py
+!/002 - Descargar modelo y runtime.py
+!/003 - Primer llamado.py
+!/004 - Chat persistente.py
+!/005 - Chat web.py
+!/rutas.py
+!/rutas_ejemplo.json
+!/app/
+/app/*
+!/app/chat_web.py
+!/app/chat_lifecycle.py
+!/app/configuracion/
+!/app/web_ui/
+/app/configuracion/*
+!/app/configuracion/modelo.json
+**/__pycache__/
+*.pyc
+**/chat-session.js
+*.log
+*.jsonl
+*.gguf
+*.safetensors
+*.part
+*.zip
+*.sqlite*
+*.db*
+.env*
+/rutas_locales.json
+/app/datos/
+/privado/
+/experiments/
+/runtime/
+/.idea/
