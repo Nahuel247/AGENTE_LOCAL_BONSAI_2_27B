@@ -4,6 +4,26 @@ Scripts Python para preparar y ejecutar **Ternary-Bonsai-2-27B PTQ1_0** en Windo
 
 Python controla el proceso; la inferencia la realiza el runtime de PrismML basado en llama.cpp. El asistente conversa, pero **no ejecuta herramientas, no navega por internet y no accede automáticamente a tus archivos**.
 
+## Así se ve la aplicación
+
+Pantalla de inicio, con la interfaz en español y el control de razonamiento en el menú lateral:
+
+![Pantalla de inicio del chat web de Bonsai 2](docs/imagenes/app-inicio.png)
+
+Ejemplo de respuesta a una consulta de redacción técnica:
+
+![Respuesta de Bonsai 2 con razonamiento activado y métricas de generación](docs/imagenes/app-respuesta.png)
+
+Estas capturas fueron seleccionadas para mostrar la aplicación. Incluyen los títulos de conversaciones visibles, pero no se distribuye la base de datos del historial del navegador.
+
+### Velocidad observada
+
+Como referencia de uso, el autor reporta **alrededor de 30 tokens por segundo de generación** en su **NVIDIA RTX 4070 Laptop de 8 GB**, con Bonsai 2 27B PTQ1_0 y el runtime CUDA de PrismML, sin DSpark.
+
+La configuración distribuida del chat web usa contexto de 8192 tokens, salida máxima de 4096, thinking activado con esfuerzo `medium`, 8 threads y offloading a GPU. La velocidad depende del contexto, la consulta, los ajustes efectivos del navegador y la carga del equipo; 30 tokens/s es una referencia aproximada, no un promedio de benchmark publicado ni una garantía para cada respuesta.
+
+La captura de respuesta muestra **24,74 tokens/s** para esa consulta concreta. Los **225,50 tokens/s** que aparecen junto al mensaje del usuario corresponden al procesamiento de la entrada, no a la generación de la respuesta. Con thinking, el modelo puede generar tokens de razonamiento antes de mostrar texto al usuario.
+
 ## Qué contiene
 
 | Archivo | Función |
@@ -17,7 +37,7 @@ Python controla el proceso; la inferencia la realiza el runtime de PrismML basad
 | `rutas_ejemplo.json` | Plantilla vacía para configurar esas ubicaciones. |
 | `app/` | Lanzador web, cierre automático, configuración e interfaz. |
 
-No se incluyen pesos, ejecutables CUDA, entornos Python, conversaciones, resultados de pruebas ni rutas personales. No hace falta instalar paquetes de Python adicionales: estos scripts utilizan la biblioteca estándar. La interfaz ya está compilada; no necesitas Node.js.
+No se incluyen pesos, ejecutables CUDA, entornos Python, archivos de conversaciones, resultados de pruebas ni rutas personales; solo se incluyen las capturas de demostración mostradas arriba. No hace falta instalar paquetes de Python adicionales: estos scripts utilizan la biblioteca estándar. La interfaz ya está compilada; no necesitas Node.js.
 
 ## Requisitos
 
@@ -152,7 +172,7 @@ La respuesta aparece progresivamente. Tus variables no se comparten automáticam
 - Los chats web se guardan en el almacenamiento del navegador. Cambiar de navegador, perfil o puerto puede mostrar un historial distinto.
 - `app/datos/registros/` contiene registros técnicos de ejecución; está excluido de Git.
 - `app/web_ui/chat-session.js` se genera al iniciar y no se versiona.
-- No se incluyen conversaciones, registros de uso, rutas personales, archivos `.env`, pesos, runtime ni entornos.
+- No se incluyen archivos de conversaciones, registros de uso, rutas personales, archivos `.env`, pesos, runtime ni entornos. Las dos capturas de demostración sí muestran el contenido y los títulos visibles seleccionados por el autor.
 - Guarda las exportaciones de conversaciones fuera del repositorio o en `privado/`. Revisa los archivos antes de cualquier commit; no uses `git add -f` para datos privados.
 
 Un `.gitignore` no borra contenido ya versionado ni protege un archivo privado colocado manualmente dentro de una ruta permitida. Este repositorio limita por defecto los archivos de la raíz que pueden incorporarse.

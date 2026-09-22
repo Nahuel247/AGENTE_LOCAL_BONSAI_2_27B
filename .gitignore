@@ -38,3 +38,11 @@
 /experiments/
 /runtime/
 /.idea/
+
+# Solo las capturas seleccionadas para el README.
+!/docs/
+/docs/*
+!/docs/imagenes/
+/docs/imagenes/*
+!/docs/imagenes/app-inicio.png
+!/docs/imagenes/app-respuesta.png
