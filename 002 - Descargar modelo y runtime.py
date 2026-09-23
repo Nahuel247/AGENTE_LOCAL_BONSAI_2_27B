@@ -18,7 +18,7 @@ from pathlib import Path
 # Al ejecutar un archivo, permitimos encontrar rutas.py también desde otra carpeta.
 if '__file__' in globals():
     sys.path.insert(0, str(Path(__file__).resolve().parent))
-from rutas import PATH_PROYECTO, PATH_MODELOS
+from rutas import PATH_PROYECTO, PATH_MODELOS, PATH_RUNTIME
 
 ##############################
 # DEFINIMOS LAS RUTAS Y LOS ARCHIVOS
@@ -26,7 +26,7 @@ from rutas import PATH_PROYECTO, PATH_MODELOS
 
 proyecto = PATH_PROYECTO
 carpeta_modelos = PATH_MODELOS
-carpeta_runtime = proyecto / 'runtime/prism-b10709-9a9394a'
+carpeta_runtime = PATH_RUNTIME
 
 modelo = {
     'destino': carpeta_modelos / 'Ternary-Bonsai-2-27B/Ternary-Bonsai-2-27B-PTQ1_0.gguf',
@@ -43,7 +43,7 @@ runtime = {
 }
 
 bibliotecas_cuda = {
-    'destino': proyecto / 'runtime/b10964/cudart-llama-bin-win-cuda-12.4-x64.zip',
+    'destino': carpeta_runtime / 'cudart-llama-bin-win-cuda-12.4-x64.zip',
     'url': 'https://github.com/ggml-org/llama.cpp/releases/download/b10964/cudart-llama-bin-win-cuda-12.4-x64.zip',
     'bytes': 391443627,
     'sha256': '8c79a9b226de4b3cacfd1f83d24f962d0773be79f1e7b75c6af4ded7e32ae1d6',

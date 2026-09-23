@@ -117,7 +117,7 @@ Adapta la ruta si el script eligió otro entorno. La última línea debe mostrar
 python "002 - Descargar modelo y runtime.py"
 ```
 
-Los pesos se guardan en `PATH_MODELOS/Ternary-Bonsai-2-27B/`. Los ejecutables quedan en `PATH_PROYECTO/runtime/`. Los archivos existentes se verifican y reutilizan; no se sobrescriben si su contenido es distinto.
+Los pesos se guardan en `PATH_MODELOS/Ternary-Bonsai-2-27B/`. Los ejecutables y sus ZIP quedan junto al modelo, en `PATH_MODELOS/Ternary-Bonsai-2-27B/runtime/prism-b10709-9a9394a/`. `rutas.py` calcula esta ubicación como `PATH_RUNTIME`: no necesitas agregar otra ruta al JSON. Los proyectos que usen el mismo `PATH_MODELOS` compartirán esta instalación; no hace falta un runtime por proyecto. Los archivos existentes se verifican y reutilizan; no se sobrescriben si su contenido es distinto.
 
 La descarga verifica tamaño y SHA256 fijados en el código. Si una descarga queda incompleta, el archivo `.part` se conserva y se informa el error; **no hay reanudación automática**. Revisa ese parcial antes de decidir eliminarlo y volver a descargar. No ejecutes dos descargas simultáneas.
 

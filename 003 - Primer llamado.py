@@ -16,7 +16,7 @@ from pathlib import Path
 # Al ejecutar un archivo, permitimos encontrar rutas.py también desde otra carpeta.
 if '__file__' in globals():
     sys.path.insert(0, str(Path(__file__).resolve().parent))
-from rutas import PATH_PROYECTO, PATH_MODELOS
+from rutas import PATH_PROYECTO, PATH_MODELOS, PATH_RUNTIME
 
 ##############################
 # DEFINIMOS LAS FUNCIONES
@@ -59,7 +59,7 @@ def mostrar_metricas(registro):
 
 proyecto = PATH_PROYECTO
 modelo = PATH_MODELOS / 'Ternary-Bonsai-2-27B/Ternary-Bonsai-2-27B-PTQ1_0.gguf'
-ejecutable = proyecto / 'runtime/prism-b10709-9a9394a/llama-cli.exe'
+ejecutable = PATH_RUNTIME / 'llama-cli.exe'
 archivo_respuesta = proyecto / 'privado/consultas_terminal/bonsai_ultima_respuesta.txt'
 archivo_log = proyecto / 'privado/consultas_terminal/bonsai_ultima_consulta.log'
 archivo_log.parent.mkdir(parents=True, exist_ok=True)

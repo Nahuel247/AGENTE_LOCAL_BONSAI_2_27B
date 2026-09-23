@@ -1,4 +1,4 @@
 {
   "model": "{PATH_MODELOS}/Ternary-Bonsai-2-27B/Ternary-Bonsai-2-27B-PTQ1_0.gguf",
-  "server": "{PATH_PROYECTO}/runtime/prism-b10709-9a9394a/llama-server.exe"
+  "server": "{PATH_RUNTIME}/llama-server.exe"
 }

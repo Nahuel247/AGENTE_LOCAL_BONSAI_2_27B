@@ -13,6 +13,9 @@ for nombre in ('PATH_PROYECTO', 'PATH_AMBIENTES', 'PATH_MODELOS', 'PATH_PYTHON')
 PATH_PROYECTO = Path(rutas['PATH_PROYECTO'])
 PATH_AMBIENTES = Path(rutas['PATH_AMBIENTES'])
 PATH_MODELOS = Path(rutas['PATH_MODELOS'])
+# Compartimos esta versión del runtime entre los proyectos que usan el modelo.
+PATH_RUNTIME = PATH_MODELOS / 'Ternary-Bonsai-2-27B/runtime/prism-b10709-9a9394a'
+rutas['PATH_RUNTIME'] = str(PATH_RUNTIME)
 PATH_PYTHON = Path(rutas['PATH_PYTHON'])
 if not PATH_PYTHON.resolve().is_relative_to(PATH_AMBIENTES.resolve()):
     raise ValueError('PATH_PYTHON debe estar dentro de PATH_AMBIENTES.')
