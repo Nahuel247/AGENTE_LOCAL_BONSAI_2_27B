@@ -31,6 +31,14 @@ def main():
     parser.add_argument('--reuse-existing', action='store_true', help='Abre la instancia del mismo modelo si ya está lista.')
     parser.add_argument('--keep-alive', action='store_true', help='Mantener el modelo cargado aunque se cierre el navegador.')
     args = parser.parse_args()
+    # El valor guardado desde la web prevalece sobre el contexto del lanzador.
+    settings_path = ROOT / 'datos' / 'ajustes_web.json'
+    if settings_path.exists():
+        saved_context = json.loads(settings_path.read_text(encoding='utf-8')).get('context')
+        if type(saved_context) is not int or not 2048 <= saved_context <= 262144:
+            parser.error('El contexto guardado debe estar entre 2048 y 262144 tokens.')
+        args.context = saved_context
+        args.max_tokens = min(args.max_tokens, args.context - 1)
     if not 1024 <= args.port <= 65535:
         parser.error('El puerto debe estar entre 1024 y 65535.')
     if args.context < 2048 or not 0 < args.max_tokens < args.context:
@@ -89,8 +97,8 @@ def main():
     process = None
     lifecycle = None
     try:
-        if not args.keep_alive and (ROOT / 'web_ui' / 'index.html').is_file():
-            lifecycle = ChatLifecycle(ROOT / 'web_ui', url)
+        if (ROOT / 'web_ui' / 'index.html').is_file():
+            lifecycle = ChatLifecycle(ROOT / 'web_ui', url, args.context, settings_path)
         with (folder / 'server.log').open('w', encoding='utf-8') as log:
             process = subprocess.Popen(command, stdout=log, stderr=subprocess.STDOUT,
                                        creationflags=getattr(subprocess, 'CREATE_NO_WINDOW', 0))
@@ -112,7 +120,7 @@ def main():
             if not args.no_browser:
                 webbrowser.open(url + '/index.html?ui=thinking1' if (ROOT / 'web_ui' / 'index.html').is_file() else url)
             while process.poll() is None:
-                if lifecycle and lifecycle.should_stop():
+                if lifecycle and not args.keep_alive and lifecycle.should_stop():
                     print('Se cerró la última pestaña. Liberando VRAM...', flush=True)
                     return 0
                 time.sleep(0.5)

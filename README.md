@@ -264,3 +264,9 @@ Puedes consultar [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) y la carpeta [
 Soy **Nahuel Canelo** y comparto este trabajo de integración, adaptación y documentación para facilitar el uso local de Bonsai. Si te resulta útil y lo compartes o adaptas, agradecería que me mencionaras y enlazaras [este repositorio](https://github.com/Nahuel247/AGENTE_LOCAL_BONSAI_2_27B).
 
 Es una solicitud voluntaria, no una condición adicional de licencia. Mi aporte no sustituye los créditos de PrismML, llama.cpp, llama-ui ni de los demás componentes utilizados; sus avisos y licencias se mantienen.
+
+### Cambiar el tamaño de contexto desde la web
+
+En **Ajustes → Muestreo y penalizaciones → Tamaño del contexto (tokens)** puedes guardar el contexto para el próximo inicio. El campo muestra el valor activo y el guardado. Para aplicarlo, cierra todas las pestañas del chat, espera a que el modelo termine y vuelve a abrir el acceso directo; recargar la página no basta. El ajuste se guarda localmente en `app/datos/ajustes_web.json`, fuera de Git, y prevalece sobre el contexto del lanzador. Si el modelo no arranca por falta de memoria, reduce ese valor en el archivo o elimina solo ese archivo para volver al valor del lanzador.
+
+El contexto incluye la entrada, los resultados de herramientas y la generación. El máximo de salida no lo amplía. Un contexto mayor consume más memoria y puede reducir la velocidad o no caber en la GPU.
