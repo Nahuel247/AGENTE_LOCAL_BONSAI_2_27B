@@ -75,6 +75,22 @@
 		<!-- Reduce GPU compositing while the local model generates tokens. -->
 <style id="bonsai-low-overhead">*,*::before,*::after {backdrop-filter:none!important;-webkit-backdrop-filter:none!important;}</style>
 <style id="bonsai-sidebar-only">nav.chat-tabs-fade {display:none!important;}</style>
+<style id="nc-credit">
+/* Firma visible únicamente con el menú expandido. */
+aside.is-expanded > div:first-child > [role="button"]::after {
+  content: "by: Nahuel Canelo";
+  position: absolute;
+  left: 46px;
+  top: 50%;
+  transform: translateY(-50%);
+  white-space: nowrap;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.4;
+  opacity: .7;
+  pointer-events: none;
+}
+</style>
 </head>
 
 	<body data-sveltekit-preload-data="hover">
