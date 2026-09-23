@@ -9,3 +9,9 @@ El monograma «NC» de Nahuel Canelo (`app/web_ui/nc-logo.png`) se generó con a
 Los cambios locales incluyen la traducción al español, el control de thinking, los ajustes visuales y el control de cierre. El archivo `chat-session.js` se genera al ejecutar la aplicación y no se distribuye.
 
 Los pesos del modelo, el runtime y las bibliotecas CUDA no están incluidos: el paso 002 los descarga de sus distribuidores oficiales. Sus licencias y condiciones corresponden a esos distribuidores. Estos avisos no asignan una licencia nueva al código propio de este proyecto.
+
+## Integración y adaptación: Nahuel Canelo
+
+Comparto este trabajo de integración, adaptación y documentación para facilitar el uso local de Bonsai. Si lo compartes o adaptas, agradecería que me mencionaras como **Nahuel Canelo** y enlazaras [el repositorio](https://github.com/Nahuel247/AGENTE_LOCAL_BONSAI_2_27B).
+
+Esta solicitud de mención es voluntaria y no añade condiciones a las licencias. Se mantienen los créditos y avisos de PrismML, llama.cpp, llama-ui y los demás componentes utilizados.

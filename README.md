@@ -242,3 +242,9 @@ La respuesta aparece progresivamente. Tus variables no se comparten automáticam
 Comparto los scripts y la aplicación que utilizo para que puedas probarlos en tu equipo. No desarrollé el modelo ni el motor de inferencia: uso el modelo de PrismML y su runtime basado en llama.cpp. La interfaz web también incorpora componentes de terceros.
 
 Puedes consultar [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) y la carpeta [LICENSES](LICENSES/) para conocer su procedencia y los avisos de licencia. Los pesos y binarios se descargan por separado de sus distribuidores oficiales.
+
+## Una mención si te resulta útil
+
+Soy **Nahuel Canelo** y comparto este trabajo de integración, adaptación y documentación para facilitar el uso local de Bonsai. Si te resulta útil y lo compartes o adaptas, agradecería que me mencionaras y enlazaras [este repositorio](https://github.com/Nahuel247/AGENTE_LOCAL_BONSAI_2_27B).
+
+Es una solicitud voluntaria, no una condición adicional de licencia. Mi aporte no sustituye los créditos de PrismML, llama.cpp, llama-ui ni de los demás componentes utilizados; sus avisos y licencias se mantienen.
