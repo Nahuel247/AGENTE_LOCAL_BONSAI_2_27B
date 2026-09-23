@@ -4,7 +4,7 @@ Preparé este proyecto para que puedas ejecutar **Bonsai 2 en tu propio computad
 
 Aquí comparto los cinco scripts que utilizo para preparar el entorno, descargar **Ternary-Bonsai-2-27B PTQ1_0** y ponerlo en marcha en Windows con una GPU NVIDIA. Más abajo te explico cómo repetir la instalación y hacer tu primera consulta.
 
-Uso Python para iniciar y controlar el modelo; quien genera las respuestas es el runtime de PrismML basado en llama.cpp. Aunque llamé al proyecto «agente local», esta versión es un asistente de conversación: **no ejecuta herramientas, no navega por internet y no accede automáticamente a tus archivos**.
+Uso Python para iniciar y controlar el modelo; quien genera las respuestas es el runtime de PrismML basado en llama.cpp. 
 
 ## Así se ve la aplicación
 
