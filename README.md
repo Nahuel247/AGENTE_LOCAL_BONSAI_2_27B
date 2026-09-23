@@ -87,6 +87,22 @@ Si es tu primera instalación, `PATH_PYTHON` puede apuntar al futuro entorno `bo
 
 El archivo local está excluido de Git. No pongas pesos ni entornos dentro del proyecto. Las rutas deben ser absolutas; no se expanden variables como `%USERPROFILE%` dentro del JSON.
 
+### Descargar el modelo por enlace
+
+Si prefieres descargar el modelo desde el navegador, te dejo el enlace oficial a la misma versión que utilizo en los scripts:
+
+**[Descargar Ternary-Bonsai-2-27B-PTQ1_0.gguf (5,95 GB)](https://huggingface.co/prism-ml/Ternary-Bonsai-2-27B-gguf/resolve/6ed5e12bf84b7a63069882c91dd9e9218647d17b/Ternary-Bonsai-2-27B-PTQ1_0.gguf)**
+
+Antes de descargarlo, comprueba el espacio disponible y si ya tienes ese archivo. Dentro de la carpeta que configuraste como `PATH_MODELOS`, crea `Ternary-Bonsai-2-27B`. Elige **Guardar como** en el navegador y guarda el archivo allí, conservando su nombre. La ubicación final debe ser:
+
+```text
+PATH_MODELOS/Ternary-Bonsai-2-27B/Ternary-Bonsai-2-27B-PTQ1_0.gguf
+```
+
+`PATH_MODELOS` representa tu ruta configurada, no una carpeta con ese nombre literal. No guardes los pesos dentro del proyecto.
+
+**Aunque lo descargues por este enlace, ejecuta el paso 3:** el script comprobará el tamaño y SHA256 del archivo, lo reutilizará sin descargarlo de nuevo si coincide y preparará el runtime y las bibliotecas CUDA. Si prefieres que el script descargue también el modelo, omite esta descarga manual y continúa con el paso 2.
+
 ## 2. Preparar el entorno
 
 En cmd, entra en la carpeta del proyecto y ejecuta el primer script. Sustituye la ruta de este ejemplo por tu `PATH_PROYECTO`:
