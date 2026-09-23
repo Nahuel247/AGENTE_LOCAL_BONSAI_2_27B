@@ -21,10 +21,10 @@ from rutas import PATH_PROYECTO, PATH_PYTHON
 ##############################
 
 lanzador = PATH_PROYECTO / '004 - Chat web.py'
-icono = PATH_PROYECTO / 'app/web_ui/nc-logo.ico'
+icono = PATH_PROYECTO / 'app/web_ui/bonsai-nc.ico'
 
 if not all(archivo.is_file() for archivo in (PATH_PYTHON, lanzador, icono)):
-    raise FileNotFoundError('Revisa el intérprete, el archivo 004 y el icono NC.')
+    raise FileNotFoundError('Revisa el intérprete, el archivo 004 y el icono de Bonsai con NC.')
 
 ##############################
 # CREAMOS O ACTUALIZAMOS EL ACCESO DIRECTO

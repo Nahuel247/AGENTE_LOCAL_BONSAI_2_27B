@@ -33,7 +33,7 @@ La captura de respuesta muestra **24,74 tokens/s** para esa consulta concreta. L
 | `003 - Primer llamado.py` | Hace una consulta y cierra el modelo al terminar. |
 | `004 - Chat web.py` | Carga el modelo y abre la aplicación en el navegador. |
 | `005 - Chat persistente en python.py` | Mantiene el modelo cargado para usar `agente()` en la consola Python. |
-| `006 - Crear acceso directo.py` | Crea o actualiza el acceso del escritorio con el logo NC. |
+| `006 - Crear acceso directo.py` | Crea o actualiza el acceso del escritorio con un icono de bonsái y la firma NC. |
 | `rutas.py` | Lee las ubicaciones privadas de cada instalación. |
 | `rutas_ejemplo.txt` | Plantilla vacía para configurar esas ubicaciones. |
 | `app/` | Lanzador web, cierre automático, configuración e interfaz. |
@@ -192,7 +192,7 @@ Después de completar la instalación, ejecuta una vez desde la terminal del pro
 python "006 - Crear acceso directo.py"
 ```
 
-Se crea **Bonsai 2 - Chat local** en tu escritorio, con el logo **NC**. Un doble clic ejecuta el `004`, inicia Python con la consola minimizada y abre la web cuando el modelo está listo. No necesitas abrir PyCharm. El script reconoce el escritorio de OneDrive y actualiza el acceso si ya existe.
+Se crea **Bonsai 2 - Chat local** en tu escritorio, con un icono de bonsái y el monograma **NC** pequeño en una esquina. Un doble clic ejecuta el `004`, inicia Python con la consola minimizada y abre la web cuando el modelo está listo. No necesitas abrir PyCharm. El script reconoce el escritorio de OneDrive y actualiza el acceso si ya existe.
 
 Usa este acceso cuando el modelo esté cerrado; si la web ya está abierta, vuelve a esa pestaña. Al cerrar la última pestaña del chat, el lanzador detiene el modelo y libera su memoria tras unos 8 segundos. Si cambias de carpeta o de intérprete, vuelve a ejecutar el `006`. El acceso contiene tus rutas locales y no se sube a GitHub.
 

@@ -6,6 +6,8 @@ Se conserva el aviso MIT del proyecto en `LICENSES/llama.cpp.txt` y los avisos d
 
 El monograma «NC» de Nahuel Canelo (`app/web_ui/nc-logo.png`) se generó con asistencia de IA para esta aplicación y sustituye al logo original en el menú y los iconos vinculados. No es el logo de llama.cpp ni de PrismML.
 
+El icono del escritorio (`app/web_ui/bonsai-nc.png` y `.ico`) combina una ilustración de bonsái generada con IA y el monograma NC. Es un diseño de esta aplicación, no un logotipo oficial de PrismML.
+
 Los cambios locales incluyen la traducción al español, el control de thinking, los ajustes visuales y el control de cierre. El archivo `chat-session.js` se genera al ejecutar la aplicación y no se distribuye.
 
 Los pesos del modelo, el runtime y las bibliotecas CUDA no están incluidos: el paso 002 los descarga de sus distribuidores oficiales. Sus licencias y condiciones corresponden a esos distribuidores. Estos avisos no asignan una licencia nueva al código propio de este proyecto.
