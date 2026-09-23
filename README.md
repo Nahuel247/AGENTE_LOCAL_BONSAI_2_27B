@@ -34,7 +34,7 @@ La captura de respuesta muestra **24,74 tokens/s** para esa consulta concreta. L
 | `004 - Chat persistente.py` | Mantiene el modelo cargado para usar `agente()` en la consola Python. |
 | `005 - Chat web.py` | Carga el modelo y abre la aplicación en el navegador. |
 | `rutas.py` | Lee las ubicaciones privadas de cada instalación. |
-| `rutas_ejemplo.json` | Plantilla vacía para configurar esas ubicaciones. |
+| `rutas_ejemplo.txt` | Plantilla vacía para configurar esas ubicaciones. |
 | `app/` | Lanzador web, cierre automático, configuración e interfaz. |
 
 No hace falta instalar paquetes de Python adicionales: estos scripts utilizan la biblioteca estándar. La interfaz ya está compilada; no necesitas Node.js.
@@ -65,15 +65,13 @@ El primer comando debe mostrar `Python 3.12.x`; el segundo, la GPU y su driver. 
 
 Descarga el ZIP del repositorio desde **Code → Download ZIP** y extráelo, o clónalo en una carpeta nueva. Usa como raíz del proyecto la carpeta donde aparecen los archivos `001` a `005`, no la carpeta que los contiene por fuera.
 
-Copia `rutas_ejemplo.json` como **`rutas_locales.json`**, al lado de los scripts, y completa las cuatro rutas. Ejemplo ficticio: sustituye `TU_USUARIO` y las carpetas por tus valores reales. En JSON puedes usar `/` para evitar escapar las barras.
+Copia `rutas_ejemplo.txt` como **`rutas_locales.txt`**, al lado de los scripts, y ábrelo con el Bloc de notas para completar las cuatro rutas. Guarda el archivo en UTF-8. Escribe una ruta por línea después del signo `=`, sin comillas ni barras duplicadas; los espacios dentro de las rutas se conservan. Puedes dejar líneas vacías y comentarios en líneas que empiecen con `#`. Ejemplo ficticio: sustituye `TU_USUARIO` y las carpetas por tus valores reales.
 
-```json
-{
-  "PATH_PROYECTO": "C:/Users/TU_USUARIO/.../AGENTE_LOCAL_BONSAI_2_27B",
-  "PATH_AMBIENTES": "C:/Users/TU_USUARIO/.../AMBIENTES_PYTHON",
-  "PATH_MODELOS": "C:/Users/TU_USUARIO/.../MODELOS_DESCARGADOS",
-  "PATH_PYTHON": "C:/Users/TU_USUARIO/.../AMBIENTES_PYTHON/bonsai_27b/Scripts/python.exe"
-}
+```text
+PATH_PROYECTO = C:\Users\TU_USUARIO\...\AGENTE_LOCAL_BONSAI_2_27B
+PATH_AMBIENTES = C:\Users\TU_USUARIO\...\AMBIENTES_PYTHON
+PATH_MODELOS = C:\Users\TU_USUARIO\...\MODELOS_DESCARGADOS
+PATH_PYTHON = C:\Users\TU_USUARIO\...\AMBIENTES_PYTHON\bonsai_27b\Scripts\python.exe
 ```
 
 - `PATH_PROYECTO`: carpeta que contiene los cinco scripts y `app/`.
@@ -83,7 +81,7 @@ Copia `rutas_ejemplo.json` como **`rutas_locales.json`**, al lado de los scripts
 
 Si es tu primera instalación, `PATH_PYTHON` puede apuntar al futuro entorno `bonsai_27b`, como en el ejemplo: el paso siguiente lo crea si no encuentra otro compatible. Después comprobarás que esta ruta coincide con la que muestra el script.
 
-El archivo local está excluido de Git. No pongas pesos ni entornos dentro del proyecto. Las rutas deben ser absolutas; no se expanden variables como `%USERPROFILE%` dentro del JSON.
+El archivo local está excluido de Git. No pongas pesos ni entornos dentro del proyecto. Las rutas deben ser absolutas; no se expanden variables como `%USERPROFILE%` dentro del TXT. Reinicia la consola Python si cambias estas rutas durante una sesión.
 
 ## 2. Preparar el entorno
 
@@ -96,9 +94,9 @@ py -3.12 "001 - Preparar entorno.py"
 
 El script busca Python 3.12 en los entornos existentes. Si no encuentra uno compatible, crea `bonsai_27b` dentro de `PATH_AMBIENTES`. 
 
-Al terminar muestra la ruta del intérprete elegido. **Copia esa ruta en `PATH_PYTHON` de `rutas_locales.json`**, si es distinta de la que habías indicado.
+Al terminar muestra la ruta del intérprete elegido. **Copia esa ruta en `PATH_PYTHON` de `rutas_locales.txt`**, si es distinta de la que habías indicado.
 
-Activa ese entorno en la misma ventana de cmd. Por ejemplo, si se creó `bonsai_27b` en la ubicación del JSON anterior:
+Activa ese entorno en la misma ventana de cmd. Por ejemplo, si se creó `bonsai_27b` en la ubicación del TXT anterior:
 
 ```bat
 call "C:\Users\TU_USUARIO\...\AMBIENTES_PYTHON\bonsai_27b\Scripts\activate.bat"
@@ -115,7 +113,7 @@ Adapta la ruta si el script eligió otro entorno. La última línea debe mostrar
 python "002 - Descargar modelo y runtime.py"
 ```
 
-Los pesos se guardan en `PATH_MODELOS/Ternary-Bonsai-2-27B/`. Los ejecutables y sus ZIP quedan junto al modelo, en `PATH_MODELOS/Ternary-Bonsai-2-27B/runtime/prism-b10709-9a9394a/`. `rutas.py` calcula esta ubicación como `PATH_RUNTIME`: no necesitas agregar otra ruta al JSON. Los proyectos que usen el mismo `PATH_MODELOS` compartirán esta instalación; no hace falta un runtime por proyecto. Los archivos existentes se verifican y reutilizan; no se sobrescriben si su contenido es distinto.
+Los pesos se guardan en `PATH_MODELOS/Ternary-Bonsai-2-27B/`. Los ejecutables y sus ZIP quedan junto al modelo, en `PATH_MODELOS/Ternary-Bonsai-2-27B/runtime/prism-b10709-9a9394a/`. `rutas.py` calcula esta ubicación como `PATH_RUNTIME`: no necesitas agregar otra ruta al TXT. Los proyectos que usen el mismo `PATH_MODELOS` compartirán esta instalación; no hace falta un runtime por proyecto. Los archivos existentes se verifican y reutilizan; no se sobrescriben si su contenido es distinto.
 
 La descarga verifica tamaño y SHA256 fijados en el código. Si una descarga queda incompleta, el archivo `.part` se conserva y se informa el error; **no hay reanudación automática**. Revisa ese parcial antes de decidir eliminarlo y volver a descargar. No ejecutes dos descargas simultáneas.
 
@@ -143,11 +141,16 @@ El modelo se carga para esa consulta y se cierra al terminar. Se muestran la res
 
 ## 5. Abrir el chat web
 
-Con los pasos anteriores completados, puedes elegir entre el chat web (`005`) o la consola Python (`004`); **no necesitas ejecutar el 004 para abrir la web**. Para usar la web, cierra cualquier otra instancia del modelo y ejecuta en la terminal:
+Con los pasos anteriores completados, puedes elegir entre el chat web (`005`) o la consola Python (`004`); **no necesitas ejecutar el 004 para abrir la web**. Para usar la web, cierra cualquier otra instancia del modelo.
+
+**Desde cmd (Símbolo del sistema de Windows):** sustituye `PATH_PROYECTO` y `PATH_PYTHON` por las rutas completas que configuraste en `rutas_locales.txt`, conservando las comillas, y ejecuta estas dos líneas:
 
 ```bat
-python "005 - Chat web.py"
+cd /d "PATH_PROYECTO"
+"PATH_PYTHON" -X utf8 "005 - Chat web.py"
 ```
+
+Estos nombres son marcadores para sustituir: cmd no los lee automáticamente del TXT. No necesitas activar el entorno, porque el segundo comando usa directamente su intérprete. Mantén la ventana de cmd abierta mientras uses el chat.
 
 Al terminar la carga se abre [el chat local](http://127.0.0.1:8088/) en el navegador predeterminado. Si no se abre automáticamente, visita esa dirección. Escribe un mensaje y envíalo para comprobar que recibes la respuesta progresivamente. Mantén abierto el proceso de Python mientras usas la web.
 
@@ -229,7 +232,7 @@ La respuesta aparece progresivamente. Tus variables no se comparten automáticam
 
 | Mensaje o síntoma | Qué revisar |
 |---|---|
-| Falta `rutas_locales.json` | Copia la plantilla y completa las cuatro rutas. |
+| Falta `rutas_locales.txt` | Copia la plantilla y completa las cuatro rutas. |
 | No encuentra `rutas` | En una consola interactiva, sitúa el directorio de trabajo en la raíz del proyecto. |
 | GPU ocupada | Cierra juegos u otros chats; en el 004 usa `cerrar_modelo()`. El 005 evita cargar otra copia cuando observa más de 2300 MiB usados. |
 | Puerto 8088 ocupado | Revisa si ya hay una instancia web abierta. Cierra esa instancia antes de iniciar otra. |

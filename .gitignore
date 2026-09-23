@@ -11,7 +11,7 @@
 !/004 - Chat persistente.py
 !/005 - Chat web.py
 !/rutas.py
-!/rutas_ejemplo.json
+!/rutas_ejemplo.txt
 !/app/
 /app/*
 !/app/chat_web.py
@@ -33,6 +33,7 @@
 *.db*
 .env*
 /rutas_locales.json
+/rutas_locales.txt
 /app/datos/
 /privado/
 /experiments/

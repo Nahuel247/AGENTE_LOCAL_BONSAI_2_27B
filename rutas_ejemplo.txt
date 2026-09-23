@@ -1,0 +1,6 @@
+# Copia este archivo como rutas_locales.txt y completa las cuatro rutas.
+# Usa rutas absolutas, sin comillas ni barras duplicadas. Se permiten espacios.
+PATH_PROYECTO =
+PATH_AMBIENTES =
+PATH_MODELOS =
+PATH_PYTHON =
