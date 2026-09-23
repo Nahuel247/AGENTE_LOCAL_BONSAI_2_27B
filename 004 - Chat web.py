@@ -40,7 +40,7 @@ gpu = subprocess.run(
 )
 if int(gpu.stdout.splitlines()[0]) > 2300:
     raise RuntimeError(
-        'La GPU está ocupada. Si usabas el 005, ejecuta cerrar_modelo() en su consola. '
+        'La GPU está ocupada. Si usabas el 007, ejecuta cerrar_modelo() en su consola. '
         'Si la web ya está abierta, úsala sin iniciar otra copia.'
     )
 

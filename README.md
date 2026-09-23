@@ -32,8 +32,8 @@ La captura de respuesta muestra **24,74 tokens/s** para esa consulta concreta. L
 | `002 - Descargar modelo y runtime.py` | Descarga los recursos oficiales y comprueba tamaño y SHA256. |
 | `003 - Primer llamado.py` | Hace una consulta y cierra el modelo al terminar. |
 | `004 - Chat web.py` | Carga el modelo y abre la aplicación en el navegador. |
-| `005 - Chat persistente en python.py` | Mantiene el modelo cargado para usar `agente()` en la consola Python. |
-| `006 - Crear acceso directo.py` | Crea o actualiza el acceso del escritorio con un icono de bonsái y la firma NC. |
+| `005 - Crear acceso directo bonsai.py` | Crea o actualiza el acceso del escritorio con un icono de bonsái y la firma NC. |
+| `007 - Chat persistente en python.py` | Mantiene el modelo cargado para usar `agente()` en la consola Python. |
 | `rutas.py` | Lee las ubicaciones privadas de cada instalación. |
 | `rutas_ejemplo.txt` | Plantilla vacía para configurar esas ubicaciones. |
 | `app/` | Lanzador web, cierre automático, configuración e interfaz. |
@@ -64,7 +64,7 @@ El primer comando debe mostrar `Python 3.12.x`; el segundo, la GPU y su driver. 
 
 ## 1. Descargar el proyecto y configurar las rutas
 
-Descarga el ZIP del repositorio desde **Code → Download ZIP** y extráelo, o clónalo en una carpeta nueva. Usa como raíz del proyecto la carpeta donde aparecen los archivos `001` a `006`, no la carpeta que los contiene por fuera.
+Descarga el ZIP del repositorio desde **Code → Download ZIP** y extráelo, o clónalo en una carpeta nueva. Usa como raíz del proyecto la carpeta donde aparecen los scripts numerados y la carpeta `app/`, no la carpeta que los contiene por fuera.
 
 Copia `rutas_ejemplo.txt` como **`rutas_locales.txt`**, al lado de los scripts, y ábrelo con el Bloc de notas para completar las cuatro rutas. Guarda el archivo en UTF-8. Escribe una ruta por línea después del signo `=`, sin comillas ni barras duplicadas; los espacios dentro de las rutas se conservan. Puedes dejar líneas vacías y comentarios en líneas que empiecen con `#`. Ejemplo ficticio: sustituye `TU_USUARIO` y las carpetas por tus valores reales.
 
@@ -142,7 +142,7 @@ El modelo se carga para esa consulta y se cierra al terminar. Se muestran la res
 
 ## 5. Abrir el chat web
 
-Con los pasos anteriores completados, puedes elegir entre el chat web (`004`) o la consola Python (`005`); **no necesitas ejecutar el 005 para abrir la web**. Para usar la web, cierra cualquier otra instancia del modelo.
+Con los pasos anteriores completados, puedes elegir entre el chat web (`004`) o la consola Python (`007`); **no necesitas ejecutar el 007 para abrir la web**. Para usar la web, cierra cualquier otra instancia del modelo.
 
 **Desde cmd (Símbolo del sistema de Windows):** sustituye `PATH_PROYECTO` y `PATH_PYTHON` por las rutas completas que configuraste en `rutas_locales.txt`, conservando las comillas, y ejecuta estas dos líneas:
 
@@ -189,23 +189,23 @@ Evita forzar la terminación de Python: puede dejar un proceso del runtime abier
 Después de completar la instalación, ejecuta una vez desde la terminal del proyecto:
 
 ```bat
-python "006 - Crear acceso directo.py"
+python "005 - Crear acceso directo bonsai.py"
 ```
 
 Se crea **Bonsai 2 - Chat local** en tu escritorio, con un icono de bonsái y el monograma **NC** pequeño en una esquina. Un doble clic ejecuta el `004`, inicia Python con la consola minimizada y abre la web cuando el modelo está listo. No necesitas abrir PyCharm. El script reconoce el escritorio de OneDrive y actualiza el acceso si ya existe.
 
-Usa este acceso cuando el modelo esté cerrado; si la web ya está abierta, vuelve a esa pestaña. Al cerrar la última pestaña del chat, el lanzador detiene el modelo y libera su memoria tras unos 8 segundos. Si cambias de carpeta o de intérprete, vuelve a ejecutar el `006`. El acceso contiene tus rutas locales y no se sube a GitHub.
+Usa este acceso cuando el modelo esté cerrado; si la web ya está abierta, vuelve a esa pestaña. Al cerrar la última pestaña del chat, el lanzador detiene el modelo y libera su memoria tras unos 8 segundos. Si cambias de carpeta o de intérprete, vuelve a ejecutar el `005`. El acceso contiene tus rutas locales y no se sube a GitHub.
 
 ## Alternativa: conversar y calcular en la consola Python
 
-Preparé el `005` para poder conversar con el modelo y seguir haciendo cálculos en la misma consola. **No lo ejecutes a la vez que la web.**
+Preparé el `007` para poder conversar con el modelo y seguir haciendo cálculos en la misma consola. **No lo ejecutes a la vez que la web.**
 
 Abre **Python Console** en PyCharm, con el intérprete configurado en el paso 2 y la raíz del proyecto como directorio de trabajo. Ejecuta este bloque una sola vez y espera el mensaje «Listo»:
 
 ```python
 from rutas import PATH_PROYECTO
 
-exec((PATH_PROYECTO / "005 - Chat persistente en python.py").read_text(encoding="utf-8"))
+exec((PATH_PROYECTO / "007 - Chat persistente en python.py").read_text(encoding="utf-8"))
 ```
 
 Después, cada vez que quieras escribir una pregunta, ejecuta:
@@ -230,9 +230,9 @@ respuesta = agente("Resume nuestra conversación", mostrar=False)
 - `limpiar_historial()` empieza una conversación nueva.
 - `cerrar_modelo()` cierra el modelo y libera su memoria cuando termines.
 
-El `005` necesita una consola que siga abierta: si lo ejecutas como un script que termina inmediatamente, el modelo también se cierra. Por eso uso `exec(...)` dentro de la consola Python en este ejemplo.
+El `007` necesita una consola que siga abierta: si lo ejecutas como un script que termina inmediatamente, el modelo también se cierra. Por eso uso `exec(...)` dentro de la consola Python en este ejemplo.
 
-La respuesta aparece progresivamente. Tus variables no se comparten automáticamente: inclúyelas en el texto si quieres que el modelo las conozca. Cierra el modelo del `005` antes de abrir la web. El `005` usa el puerto 8090.
+La respuesta aparece progresivamente. Tus variables no se comparten automáticamente: inclúyelas en el texto si quieres que el modelo las conozca. Cierra el modelo del `007` antes de abrir la web. El `007` usa el puerto 8090.
 
 ## Privacidad y almacenamiento
 
@@ -247,7 +247,7 @@ La respuesta aparece progresivamente. Tus variables no se comparten automáticam
 |---|---|
 | Falta `rutas_locales.txt` | Copia la plantilla y completa las cuatro rutas. |
 | No encuentra `rutas` | En una consola interactiva, sitúa el directorio de trabajo en la raíz del proyecto. |
-| GPU ocupada | Cierra juegos u otros chats; en el 005 usa `cerrar_modelo()`. El 004 evita cargar otra copia cuando observa más de 2300 MiB usados. |
+| GPU ocupada | Cierra juegos u otros chats; en el 007 usa `cerrar_modelo()`. El 004 evita cargar otra copia cuando observa más de 2300 MiB usados. |
 | Puerto 8088 ocupado | Revisa si ya hay una instancia web abierta. Cierra esa instancia antes de iniciar otra. |
 | Solo aparece «Pensando» o una respuesta cortada | Desactiva thinking para la siguiente consulta o ajusta el máximo de salida y el contexto disponible. |
 | Falta el modelo o runtime | Ejecuta el 002 y revisa las rutas. |
