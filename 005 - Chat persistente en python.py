@@ -94,7 +94,7 @@ def agente(pregunta=None, mostrar=True):
     """Consultar al modelo; mostrar=False devuelve el texto en vez de imprimirlo."""
     # Comprobamos que el modelo siga cargado y pedimos texto si no se proporcionó.
     if proceso_bonsai.poll() is not None:
-        raise RuntimeError('El modelo está cerrado. Vuelve a ejecutar el archivo 004.')
+        raise RuntimeError('El modelo está cerrado. Vuelve a ejecutar el archivo 005.')
     if pregunta is None:
         pregunta = input('Tú: ')
     if not isinstance(pregunta, str) or not pregunta.strip():

@@ -8,8 +8,9 @@
 !/001 - Preparar entorno.py
 !/002 - Descargar modelo y runtime.py
 !/003 - Primer llamado.py
-!/004 - Chat persistente.py
-!/005 - Chat web.py
+!/005 - Chat persistente en python.py
+!/004 - Chat web.py
+!/006 - Crear acceso directo.py
 !/rutas.py
 !/rutas_ejemplo.txt
 !/app/
