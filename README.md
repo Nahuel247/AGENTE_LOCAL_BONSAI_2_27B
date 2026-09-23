@@ -16,15 +16,13 @@ Ejemplo de respuesta a una consulta de redacción técnica:
 
 ![Respuesta de Bonsai 2 con razonamiento activado y métricas de generación](docs/imagenes/app-respuesta.png)
 
-Incluí estas capturas de mis pruebas para mostrarte la interfaz. El repositorio no incluye mi historial de conversaciones; al instalarlo tendrás tu propio historial.
-
 ### Velocidad observada
 
 En mi **NVIDIA RTX 4070 Laptop de 8 GB** he observado **alrededor de 30 tokens por segundo de generación**, usando Bonsai 2 27B PTQ1_0 con el runtime CUDA de PrismML, sin DSpark.
 
-Dejé el chat web configurado con contexto de 8192 tokens, salida máxima de 4096, razonamiento activado con esfuerzo `medium`, 8 hilos de CPU y carga de capas en la GPU. La velocidad cambia según la consulta, el contexto, los ajustes del navegador y lo que esté haciendo el equipo. Los 30 tokens/s son una referencia de mi experiencia, no una velocidad garantizada ni un promedio de un benchmark publicado.
+Dejé el chat web configurado con contexto de 8192 tokens, salida máxima de 4096, razonamiento activado con esfuerzo `medium`, 8 hilos de CPU y carga de capas en la GPU. La velocidad cambia según la consulta, el contexto, los ajustes del navegador y lo que esté haciendo el equipo.
 
-La captura de respuesta muestra **24,74 tokens/s** para esa consulta concreta. Los **225,50 tokens/s** que aparecen junto al mensaje del usuario corresponden al procesamiento de la entrada, no a la generación de la respuesta. Con thinking, el modelo puede generar tokens de razonamiento antes de mostrar texto al usuario.
+La captura de respuesta muestra **24,74 tokens/s** para esa consulta concreta. Los **225,50 tokens/s** que aparecen junto al mensaje del usuario corresponden al procesamiento de la entrada. Con thinking, el modelo puede generar tokens de razonamiento antes de mostrar texto al usuario.
 
 ## Qué contiene
 
@@ -39,7 +37,7 @@ La captura de respuesta muestra **24,74 tokens/s** para esa consulta concreta. L
 | `rutas_ejemplo.json` | Plantilla vacía para configurar esas ubicaciones. |
 | `app/` | Lanzador web, cierre automático, configuración e interfaz. |
 
-No se incluyen pesos, ejecutables CUDA, entornos Python, archivos de conversaciones, resultados de pruebas ni rutas personales; solo se incluyen las capturas de demostración mostradas arriba. No hace falta instalar paquetes de Python adicionales: estos scripts utilizan la biblioteca estándar. La interfaz ya está compilada; no necesitas Node.js.
+No hace falta instalar paquetes de Python adicionales: estos scripts utilizan la biblioteca estándar. La interfaz ya está compilada; no necesitas Node.js.
 
 ## Requisitos
 
@@ -48,7 +46,7 @@ No se incluyen pesos, ejecutables CUDA, entornos Python, archivos de conversacio
 - Espacio para el modelo de 5,95 GB, los ZIP del runtime y CUDA, y sus archivos extraídos. Conviene disponer de al menos 12 GB libres; el descargador comprueba espacio antes de continuar.
 - Conexión a internet para la descarga inicial y un navegador moderno para el chat web.
 
-Lo he utilizado en mi RTX 4070 Laptop de 8 GB; no he comprobado el rendimiento en todas las GPU. Los scripts no instalan ni modifican drivers y no utilizan DSpark. Los 5,95 GB corresponden al archivo del modelo: al ejecutarlo también hace falta memoria para el contexto y otros recursos.
+Lo he utilizado en mi RTX 4070 Laptop de 8 GB. Los scripts no instalan ni modifican drivers y no utilizan DSpark. Los 5,95 GB corresponden al archivo del modelo: al ejecutarlo también hace falta memoria para el contexto y otros recursos.
 
 ## Antes de empezar
 
@@ -71,10 +69,10 @@ Copia `rutas_ejemplo.json` como **`rutas_locales.json`**, al lado de los scripts
 
 ```json
 {
-  "PATH_PROYECTO": "C:/Proyectos/AGENTE_LOCAL_BONSAI_2_27B",
-  "PATH_AMBIENTES": "C:/Users/TU_USUARIO/AMBIENTES_PYTHON",
-  "PATH_MODELOS": "C:/Users/TU_USUARIO/OneDrive/Proyectos/MODELOS_DESCARGADOS",
-  "PATH_PYTHON": "C:/Users/TU_USUARIO/AMBIENTES_PYTHON/bonsai_27b/Scripts/python.exe"
+  "PATH_PROYECTO": "C:/Users/TU_USUARIO/.../AGENTE_LOCAL_BONSAI_2_27B",
+  "PATH_AMBIENTES": "C:/Users/TU_USUARIO/.../AMBIENTES_PYTHON",
+  "PATH_MODELOS": "C:/Users/TU_USUARIO/.../MODELOS_DESCARGADOS",
+  "PATH_PYTHON": "C:/Users/TU_USUARIO/.../AMBIENTES_PYTHON/bonsai_27b/Scripts/python.exe"
 }
 ```
 
@@ -92,18 +90,18 @@ El archivo local está excluido de Git. No pongas pesos ni entornos dentro del p
 En cmd, entra en la carpeta del proyecto y ejecuta el primer script. Sustituye la ruta de este ejemplo por tu `PATH_PROYECTO`:
 
 ```bat
-cd /d "C:\Proyectos\AGENTE_LOCAL_BONSAI_2_27B"
+cd /d "C:\Users\TU_USUARIO\...\AGENTE_LOCAL_BONSAI_2_27B"
 py -3.12 "001 - Preparar entorno.py"
 ```
 
-El script busca Python 3.12 en los entornos existentes. Si no encuentra uno compatible, crea `bonsai_27b` dentro de `PATH_AMBIENTES`. No reemplaza un entorno incompatible existente.
+El script busca Python 3.12 en los entornos existentes. Si no encuentra uno compatible, crea `bonsai_27b` dentro de `PATH_AMBIENTES`. 
 
 Al terminar muestra la ruta del intérprete elegido. **Copia esa ruta en `PATH_PYTHON` de `rutas_locales.json`**, si es distinta de la que habías indicado.
 
 Activa ese entorno en la misma ventana de cmd. Por ejemplo, si se creó `bonsai_27b` en la ubicación del JSON anterior:
 
 ```bat
-call "C:\Users\TU_USUARIO\AMBIENTES_PYTHON\bonsai_27b\Scripts\activate.bat"
+call "C:\Users\TU_USUARIO\...\AMBIENTES_PYTHON\bonsai_27b\Scripts\activate.bat"
 python -c "import sys; print(sys.executable)"
 ```
 
@@ -131,7 +129,7 @@ La descarga verifica tamaño y SHA256 fijados en el código. Si una descarga que
 | Runtime | [PrismML llama.cpp prism-b10709-9a9394a](https://github.com/PrismML-Eng/llama.cpp/releases/tag/prism-b10709-9a9394a), Windows x64 CUDA 12.4 |
 | Bibliotecas CUDA | [llama.cpp b10964](https://github.com/ggml-org/llama.cpp/releases/tag/b10964), paquete CUDA 12.4 |
 
-Esta distribución usa **Bonsai 2 ternario PTQ1_0**, no Bonsai 1 Q1_0. No sustituyas el runtime por otro sin comprobar que admite este formato.
+Esta distribución usa **Bonsai 2 ternario PTQ1_0**. No sustituyas el runtime por otro sin comprobar que admite este formato.
 
 ## 4. Primera consulta
 
@@ -225,10 +223,7 @@ La respuesta aparece progresivamente. Tus variables no se comparten automáticam
 - Los chats web se guardan en el almacenamiento del navegador. Cambiar de navegador, perfil o puerto puede mostrar un historial distinto.
 - `app/datos/registros/` contiene registros técnicos de ejecución; está excluido de Git.
 - `app/web_ui/chat-session.js` se genera al iniciar y no se versiona.
-- Dejé fuera del repositorio mis conversaciones, registros de uso, rutas personales, archivos `.env`, pesos, runtime y entornos. Las capturas de arriba sí muestran ejemplos de mis pruebas.
-- Guarda las exportaciones de conversaciones fuera del repositorio o en `privado/`. Revisa los archivos antes de cualquier commit; no uses `git add -f` para datos privados.
 
-Un `.gitignore` no borra contenido ya versionado ni protege un archivo privado colocado manualmente dentro de una ruta permitida. Este repositorio limita por defecto los archivos de la raíz que pueden incorporarse.
 
 ## Problemas habituales
 
