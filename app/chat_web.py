@@ -104,6 +104,9 @@ def main():
                                        creationflags=getattr(subprocess, 'CREATE_NO_WINDOW', 0))
             deadline = time.monotonic() + 180
             while True:
+                if lifecycle and not args.keep_alive and lifecycle.should_stop():
+                    print('Se cerró la última pestaña durante la carga. Liberando VRAM...', flush=True)
+                    return 0
                 if process.poll() is not None:
                     raise RuntimeError(f'El runtime terminó con código {process.returncode}. Revisa {folder / "server.log"}')
                 try:

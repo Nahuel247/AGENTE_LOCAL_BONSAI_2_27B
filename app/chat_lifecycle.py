@@ -5,6 +5,7 @@ import secrets
 import threading
 import time
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+from urllib.parse import urlsplit, parse_qs
 
 
 class ChatLifecycle:
@@ -13,10 +14,48 @@ class ChatLifecycle:
         self.last_seen = time.monotonic()
         self.connected = False
         self.lock = threading.Lock()
+        self.stopping = threading.Event()
         token = secrets.token_urlsafe(32)
         owner = self
 
         class Handler(BaseHTTPRequestHandler):
+            def do_GET(self):
+                # Una conexión abierta por pestaña permite detectar el cierre aun sin pagehide.
+                query = parse_qs(urlsplit(self.path).query)
+                tab = query.get('id', [''])[0]
+                if (urlsplit(self.path).path != '/events' or self.headers.get('Origin') != origin
+                        or query.get('token') != [token] or not 0 < len(tab) <= 64):
+                    self.send_error(400)
+                    return
+                connection = secrets.token_hex(8)
+                with owner.lock:
+                    owner.connected = True
+                    owner.last_seen = time.monotonic()
+                    owner.tabs[tab] = (owner.last_seen, connection)
+                try:
+                    self.send_response(200)
+                    self.send_header('Content-Type', 'text/event-stream')
+                    self.send_header('Cache-Control', 'no-store')
+                    self.send_header('Access-Control-Allow-Origin', origin)
+                    self.end_headers()
+                    while not owner.stopping.is_set():
+                        with owner.lock:
+                            if owner.tabs.get(tab, (None, None))[1] != connection:
+                                break
+                        self.wfile.write(b'data: alive\n\n')
+                        self.wfile.flush()
+                        with owner.lock:
+                            if owner.tabs.get(tab, (None, None))[1] == connection:
+                                owner.tabs[tab] = (time.monotonic(), connection)
+                        owner.stopping.wait(1)
+                except OSError:
+                    pass  # El navegador cerró la conexión.
+                finally:
+                    with owner.lock:
+                        if owner.tabs.get(tab, (None, None))[1] == connection:
+                            owner.tabs.pop(tab, None)
+                            owner.last_seen = time.monotonic()
+
             def do_POST(self):
                 try:
                     length = int(self.headers.get('Content-Length', '0'))
@@ -52,7 +91,7 @@ class ChatLifecycle:
                         if data['event'] == 'close':
                             owner.tabs.pop(data['id'], None)
                         else:
-                            owner.tabs[data['id']] = owner.last_seen
+                            owner.tabs[data['id']] = (owner.last_seen, None)
                     self.send_response(204)
                     self.send_header('Access-Control-Allow-Origin', origin)
                     self.end_headers()
@@ -70,15 +109,19 @@ class ChatLifecycle:
         script = '''(() => {
           const config = CONFIG;
           window.bonsaiSession = config;
-          const id = crypto.randomUUID();
-          const ping = event => navigator.sendBeacon(config.url,
-            JSON.stringify({token:config.token,id,event}));
-          let timer;
-          const start = () => {clearInterval(timer); ping('alive'); timer=setInterval(()=>ping('alive'),15000);};
+          let stream, id;
+          const start = () => {
+            if (stream) return;
+            id = crypto.randomUUID();
+            stream = new EventSource(config.url+'events?'+new URLSearchParams({token:config.token,id}));
+          };
           start();
-          addEventListener('pagehide',()=>{clearInterval(timer);ping('close');});
+          addEventListener('pagehide',()=>{
+            if (stream) stream.close();
+            stream = null;
+            navigator.sendBeacon(config.url, JSON.stringify({token:config.token,id,event:'close'}));
+          });
           addEventListener('pageshow',start);
-          document.addEventListener('visibilitychange',()=>{if(!document.hidden)ping('alive');});
         })();'''.replace('CONFIG', json.dumps(config))
         (ui_dir / 'chat-session.js').write_text(script, encoding='utf-8')
         index = ui_dir / 'index.html'
@@ -90,10 +133,11 @@ class ChatLifecycle:
     def should_stop(self, now=None):
         now = time.monotonic() if now is None else now
         with self.lock:
-            self.tabs = {key:seen for key,seen in self.tabs.items() if now-seen < 180}
+            self.tabs = {key:seen for key,seen in self.tabs.items() if now-seen[0] < 180}
             # Reloads get 8 seconds; a browser crash eventually expires its heartbeat.
             return self.connected and not self.tabs and now-self.last_seen >= 8
 
     def close(self):
+        self.stopping.set()
         self.server.shutdown()
         self.server.server_close()
